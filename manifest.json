@@ -25,6 +25,7 @@
       "js": [
         "dist/contentscript.js"
       ],
+      "css": ["styles/app.css"],
       "matches": [
         "http://*.taobao.com/*",
         "https://*.taobao.com/*",

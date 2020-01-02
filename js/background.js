@@ -1,1 +1,7 @@
-console.log('backgroundfsadf.js');
+// 监听来自content-script的消息
+// eslint-disable-next-line
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log('收到来自content-script的消息：');
+  console.log(request, sender, sendResponse);
+  sendResponse(`我是后台，我已收到你的消息：${JSON.stringify(request)}`);
+});
