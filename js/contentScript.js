@@ -1,14 +1,11 @@
-const title = document.createElement('h1');
-title.textContent = 'Hello Poi!';
-title.className = 'title';
+import decryptor from './utils/decrypt';
+import data from './utils/testData';
 
 const tip = document.createElement('div');
-tip.textContent = 'Edit src/index.js and save to reload.';
-tip.className = 'tip';
+tip.textContent = decryptor(data);
 
 const app = document.getElementById('app');
 
 if (app) {
-  app.appendChild(title);
   app.appendChild(tip);
 }
