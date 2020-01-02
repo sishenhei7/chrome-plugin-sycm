@@ -1,0 +1,39 @@
+{
+    "extends": [
+        "airbnb-base"
+    ],
+    "plugins": [
+        "import"
+    ],
+    "env": {
+        "browser": true,
+        "jasmine": true,
+        "jest": true
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [".js", ".jsx", ".ts", ".tsx"]
+            }
+        }
+    },
+    "rules": {
+        "global-require": 0,
+        "implicit-arrow-linebreak": 0,
+        "import/extensions": [
+            2,
+            {
+                "ts": "never",
+                "tsx": "never",
+                "js": "never",
+                "jsx": "never"
+            }
+        ],
+        "no-console": 0,
+        "no-param-reassign": 0,
+        "no-plusplus": 0,
+        "no-script-url": 0,
+        "no-underscore-dangle": 0,
+        "object-curly-newline": 0
+    }
+}

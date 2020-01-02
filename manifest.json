@@ -1,0 +1,60 @@
+{
+  "id": "com.zhishu99.plugin",
+  "manifest_version": 2,
+  "author": "yimian",
+  "name": "一面数据：生意参谋插件",
+  "version": "1.0.0",
+  "description": "一面数据",
+  "icons": {
+    "16": "icons/icon-16.png",
+    "19": "icons/icon-19.png",
+    "38": "icons/icon-38.png",
+    "64": "icons/icon-64.png",
+    "128": "icons/icon-128.png"
+  },
+  "browser_action": {
+    "default_icon": "images/48.png",
+    "default_popup": "popup.html",
+    "default_title": "一面数据-生意参谋插件"
+  },
+  "background": {
+    "page": "background.html"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "dist/contentscript.js"
+      ],
+      "matches": [
+        "http://*.taobao.com/*",
+        "https://*.taobao.com/*",
+        "http://*.tmall.com/*",
+        "https://*.tmall.com/*",
+        "https://*.pinduoduo.com/*",
+        "https://*.jd.com/*",
+        "https://*.yimian.com.cn/*",
+        "https://*.test.yimian.com.cn/*"
+        ],
+      "run_at": "document_end"
+    }
+  ],
+
+  "content_security_policy": "script-src 'self'; object-src 'self'",
+  "web_accessible_resources": [
+    "images/*",
+    "styles/*",
+    "dist/*"
+  ],
+  "homepage_url": "https://www.yimian.com.cn/",
+  "permissions": [
+    "*://*.taobao.com/*",
+    "tabs",
+    "activeTab",
+    "storage",
+    "cookies",
+    "webRequest",
+    "contextMenus",
+    "notifications",
+    "webRequestBlocking"
+  ]
+}
