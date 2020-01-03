@@ -10,6 +10,9 @@
         "jasmine": true,
         "jest": true
     },
+    "globals": {
+        "chrome": true
+    },
     "settings": {
         "import/resolver": {
             "node": {

@@ -1,5 +1,4 @@
 // 监听来自content-script的消息
-// eslint-disable-next-line
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log('收到来自content-script的消息：');
   console.log(request, sender, sendResponse);
