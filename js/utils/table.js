@@ -1,7 +1,7 @@
 // 手写的简易表格组件
 export default class MyTable {
-  constructor(id, data) {
-    this.id = id;
+  constructor(containerSelector, data) {
+    this.containerSelector = containerSelector;
     this.data = data;
     this.init();
   }
@@ -11,7 +11,7 @@ export default class MyTable {
       return;
     }
 
-    const container = document.getElementById(this.id);
+    const container = document.querySelector(this.containerSelector);
     const table = document.createElement('table');
     const thead = this.makeHeader();
     const tbody = this.makeBody();

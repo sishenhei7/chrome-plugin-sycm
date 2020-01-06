@@ -6,14 +6,14 @@ module.exports = {
   entry: {
     popup: './js/popup.js',
     background: './js/background.js',
-    contentScript: './js/contentScript.js'
+    contentScript: './js/contentScript.js',
   },
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
   },
   devServer: {
-    contentBase: path.join(__dirname, ""),
+    contentBase: path.join(__dirname, ''),
     publicPath: '/dist/',
     watchContentBase: true,
     compress: true,
@@ -24,19 +24,41 @@ module.exports = {
   module: {
     rules: [
       {
-        enforce: "pre",
+        enforce: 'pre',
         test: /\.js$/,
         exclude: /node_modules/,
         options: {
-            configFile: path.resolve(__dirname, './.eslintrc'),
+          configFile: path.resolve(__dirname, './.eslintrc'),
         },
-        loader: "eslint-loader"
+        loader: 'eslint-loader',
       },
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: "babel-loader"
-      }
+        loader: 'babel-loader',
+      },
+      {
+        test: /\.css$/i,
+        use: [
+          'style-loader',
+          'css-loader',
+          'postcss-loader',
+        ],
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              implementation: require('sass'),
+            },
+          },
+          'postcss-loader',
+        ],
+      },
     ],
   },
 };
