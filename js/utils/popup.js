@@ -38,8 +38,10 @@ export default class Popup {
       this.hide();
     });
 
-    overlay.addEventListener('click', () => {
-      this.hide();
+    overlay.addEventListener('click', (e) => {
+      if (e.target.classList.contains('ym-overlay')) {
+        this.hide();
+      }
     });
 
     this.overlay = overlay;

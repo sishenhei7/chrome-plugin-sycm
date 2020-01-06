@@ -44,5 +44,6 @@ export function decryptor(data) {
     throw new Error('AES解密发生问题');
   }
 
+  console.log('data:', result);
   return result;
 }

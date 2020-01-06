@@ -31,13 +31,26 @@ export default {
     const str = parseLocalStorage('mc/mq/supply/mkt/overview.json');
     const data = decryptor(str);
 
-    const tableData = {};
-    tableData['搜索人气'] = data.seIpvUvHits;
-    tableData['访客数'] = data.uv;
-    tableData['收藏人数'] = data.cltByrCnt;
-    tableData['加购人数'] = data.cartByrCnt;
-    tableData['客群指数'] = data.payByrCntIndex;
-    tableData['交易指数'] = data.tradeIndex;
+    const item = {};
+    const tableData = [];
+
+    item['类别'] = '值';
+    item['搜索人气'] = data.seIpvUvHits.value;
+    item['访客数'] = data.uv.value;
+    item['收藏人数'] = data.cltByrCnt.value;
+    item['加购人数'] = data.cartByrCnt.value;
+    item['客群指数'] = data.payByrCntIndex.value;
+    item['交易指数'] = data.tradeIndex.value;
+    tableData.push({ ...item });
+
+    item['类别'] = '相比前一日';
+    item['搜索人气'] = data.seIpvUvHits.cycleCrc;
+    item['访客数'] = data.uv.cycleCrc;
+    item['收藏人数'] = data.cltByrCnt.cycleCrc;
+    item['加购人数'] = data.cartByrCnt.cycleCrc;
+    item['客群指数'] = data.payByrCntIndex.cycleCrc;
+    item['交易指数'] = data.tradeIndex.cycleCrc;
+    tableData.push({ ...item });
 
     popup.reset();
     new MyTable('.ym-dialog', tableData);
