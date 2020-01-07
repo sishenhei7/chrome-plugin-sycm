@@ -1,14 +1,19 @@
 import marketIndex from './tabs/marketIndex';
+import brandAnalysis from './tabs/brandAnalysis';
+import marketRank from './tabs/marketRank';
 import '../styles/app.scss';
 
 function addButtons() {
   const { host, pathname } = window.location;
 
-  if (
-    host.indexOf('localhost') > -1
-    || (host === 'sycm.taobao.com' && pathname === '/mc/mq/overview')
-  ) {
+  if (host !== 'sycm.taobao.com') return;
+
+  if (pathname === '/mc/mq/overview') {
     marketIndex.init();
+  } else if (pathname === '/mc/ci/brand/analysis') {
+    brandAnalysis.init();
+  } else if (pathname === '/mc/mq/market_rank') {
+    marketRank.init();
   }
 }
 

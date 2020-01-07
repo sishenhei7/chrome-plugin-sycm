@@ -3,20 +3,20 @@ import MyTable from '../utils/table';
 import { parseLocalStorage, decryptor } from '../utils/decrypt';
 // import testData from '../utils/testData';
 
-// 市场大盘页的处理
+// 市场大盘
 export default {
   init() {
     this.addOverviewButton();
   },
   addOverviewButton() {
-    let button = document.querySelector('#market-index-overview');
+    let button = document.querySelector('#ym-market-index-overview');
 
     if (!button) {
       const container = document.querySelector('#cateTrend .cardHeader');
 
       if (container) {
         button = document.createElement('button');
-        button.id = 'market-index-overview';
+        button.id = 'ym-market-index-overview';
         button.className = 'ym-button ym-button-see';
         button.innerHTML = '一面插件：点击查看';
 

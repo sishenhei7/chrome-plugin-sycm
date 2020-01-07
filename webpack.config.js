@@ -1,4 +1,5 @@
 const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV,
@@ -9,12 +10,12 @@ module.exports = {
     contentScript: './js/contentScript.js',
   },
   output: {
-    filename: '[name].js',
+    filename: './scripts/[name].js',
     path: path.resolve(__dirname, 'dist'),
   },
   devServer: {
     contentBase: path.join(__dirname, ''),
-    publicPath: '/dist/',
+    publicPath: '',
     watchContentBase: true,
     compress: true,
     port: 3009,
@@ -61,4 +62,28 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new CopyPlugin([
+      {
+        from: 'manifest.json',
+        to: '',
+      },
+      {
+        from: 'background.html',
+        to: '',
+      },
+      {
+        from: 'popup.html',
+        to: '',
+      },
+      {
+        from: 'icons',
+        to: 'icons',
+      },
+      {
+        from: 'images',
+        to: 'images',
+      },
+    ]),
+  ],
 };

@@ -6,7 +6,7 @@ export function parseLocalStorage(path) {
 
   try {
     const reg = new RegExp(path);
-    const keyList = (localStorage.__q__ || '').split('|').reverse();
+    const keyList = JSON.parse((localStorage.__q__ || '""')).split('|').reverse();
     const tempKey = keyList.find((item) => reg.test(item));
     data = JSON.parse(localStorage[decodeURIComponent(tempKey)]);
   } catch (error) {
