@@ -3,6 +3,8 @@ import Popup from '../utils/popup';
 import MyTable from '../utils/table';
 // import { getToken, getQueryString, getTansitId } from '../utils/util';
 import { decryptor } from '../utils/decrypt';
+import { generateDownloadButton } from '../utils/xlsx';
+import { decimalFormat } from '../utils/util';
 
 // 市场排行
 export default {
@@ -54,7 +56,13 @@ export default {
     const slicedData = data.sort((a, b) => a.cateRankId.value - b.cateRankId.value).slice(0, 20);
     const tableData = this.generateOverviewTableData(slicedData, tabType, cardType);
 
+    const button = generateDownloadButton({
+      data: tableData,
+      filename: '市场排行.xlsx',
+    });
+
     popup.reset();
+    popup.add(button);
     new MyTable('.ym-dialog', tableData);
     popup.show();
   },
@@ -89,7 +97,7 @@ export default {
 
       if (cardType === 'hotsale') {
         tableItem['交易指数'] = tradeIndex ? Math.round(tradeIndex.value) : '-';
-        tableItem['交易增长幅度'] = tradeGrowthRange ? tradeGrowthRange.value.toFixed(4) : '-';
+        tableItem['交易增长幅度'] = tradeGrowthRange ? decimalFormat(tradeGrowthRange.value) : '-';
         tableItem['支付转化指数'] = payRateIndex ? Math.round(payRateIndex.value) : '-';
       } else if (cardType === 'hotsearch') {
         tableItem['流量指数'] = uvIndex ? Math.round(uvIndex.value) : '-';

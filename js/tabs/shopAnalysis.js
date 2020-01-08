@@ -1,6 +1,7 @@
 import Popup from '../utils/popup';
 import MyTable from '../utils/table';
 import { parseLocalStorage, decryptor } from '../utils/decrypt';
+import { generateDownloadButton } from '../utils/xlsx';
 // import testData from '../utils/testData';
 
 // 品牌分析
@@ -70,7 +71,13 @@ export default {
       tableData.unshift({ ...item });
     });
 
+    const button = generateDownloadButton({
+      data: tableData,
+      filename: '竞店对比.xlsx',
+    });
+
     popup.reset();
+    popup.add(button);
     new MyTable('.ym-dialog', tableData);
     popup.show();
   },
@@ -98,27 +105,63 @@ export default {
     const { data } = decryptor(str);
 
     const tableData = [];
+    const downloadData = [];
 
     data.forEach((row) => {
-      const {
-        pageName,
-        selfShopUvIndex,
-        rivalShop1UvIndex,
-        rivalShop2UvIndex,
-        selfShopUv,
-      } = row;
-
-      const item = {};
-      item['流量来源'] = pageName ? pageName.value : '-';
-      item['流量指数(本店)'] = selfShopUvIndex ? Math.round(selfShopUvIndex.value) : '-';
-      item['流量指数(竞店1)'] = rivalShop1UvIndex ? Math.round(rivalShop1UvIndex.value) : '-';
-      item['流量指数(竞店2)'] = rivalShop2UvIndex ? Math.round(rivalShop2UvIndex.value) : '-';
-      item['本店访问数'] = selfShopUv ? Math.round(selfShopUv.value) : '-';
+      const item = this.generateRow(row);
       tableData.push({ ...item });
+
+      const childItem = [];
+      row.children.forEach((childRow) => {
+        const childRowItem = this.generateRow(childRow);
+        childItem.push({ ...childRowItem });
+      });
+
+      downloadData.push({
+        data: childItem,
+        name: item['流量来源'],
+      });
+    });
+
+    downloadData.unshift({
+      data: tableData,
+      name: '入店来源',
+    });
+
+    const button = generateDownloadButton({
+      data: downloadData,
+      filename: '入店来源.xlsx',
+      isMultiple: true,
     });
 
     popup.reset();
+    popup.add(button);
     new MyTable('.ym-dialog', tableData);
     popup.show();
+  },
+  generateRow(rowData) {
+    const {
+      pageName,
+      selfShopUvIndex,
+      rivalShop1UvIndex,
+      rivalShop2UvIndex,
+      selfShopUv,
+    } = rowData;
+
+    const item = {};
+    item['流量来源'] = pageName ? pageName.value : '-';
+    item['流量指数(本店)'] = selfShopUvIndex ? Math.round(selfShopUvIndex.value) : '-';
+
+    if (rivalShop1UvIndex) {
+      item['流量指数(竞店1)'] = rivalShop1UvIndex ? Math.round(rivalShop1UvIndex.value) : '-';
+    }
+
+    if (rivalShop2UvIndex) {
+      item['流量指数(竞店2)'] = rivalShop2UvIndex ? Math.round(rivalShop2UvIndex.value) : '-';
+    }
+
+    item['本店访问数'] = selfShopUv ? Math.round(selfShopUv.value) : '-';
+
+    return item;
   },
 };

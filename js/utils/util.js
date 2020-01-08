@@ -49,3 +49,7 @@ export function getTansitId() {
   encrypt.setPublicKey(publicKey);
   return encrypt.encrypt('w28Cz694s63kBYk4');
 }
+
+export function decimalFormat(num) {
+  return `${(num * 100).toFixed(2)}%`;
+}

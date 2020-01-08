@@ -1,6 +1,7 @@
 import Popup from '../utils/popup';
 import MyTable from '../utils/table';
 import { parseLocalStorage, decryptor } from '../utils/decrypt';
+import { generateDownloadButton } from '../utils/xlsx';
 // import testData from '../utils/testData';
 
 // 品牌分析
@@ -67,7 +68,13 @@ export default {
       tableData.unshift({ ...item });
     });
 
+    const button = generateDownloadButton({
+      data: tableData,
+      filename: '品牌分析.xlsx',
+    });
+
     popup.reset();
+    popup.add(button);
     new MyTable('.ym-dialog', tableData);
     popup.show();
   },

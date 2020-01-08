@@ -56,18 +56,14 @@ export default class Popup {
     this.overlay.classList.remove('ym-overlay--show');
   }
 
-  appendChild(content) {
-    setTimeout(() => {
-      this.dialog.appendChild(content);
-    }, 50);
+  add(content) {
+    this.dialog.appendChild(content);
   }
 
   reset() {
     while (this.dialog.hasChildNodes()) {
       const element = this.dialog.firstChild;
-      if (!element.classList.contains('ym-dialog-close')) {
-        this.dialog.removeChild(element);
-      }
+      this.dialog.removeChild(element);
     }
   }
 }

@@ -49,6 +49,7 @@
     "crypto-js": "^3.1.9-1",
     "jsencrypt": "^3.0.0-rc.1",
     "postcss-loader": "^3.0.0",
-    "sweetalert": "^2.1.2"
+    "sweetalert": "^2.1.2",
+    "xlsx": "^0.15.4"
   }
 }

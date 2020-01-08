@@ -1,6 +1,8 @@
 import Popup from '../utils/popup';
 import MyTable from '../utils/table';
 import { parseLocalStorage, decryptor } from '../utils/decrypt';
+import { generateDownloadButton } from '../utils/xlsx';
+import { decimalFormat } from '../utils/util';
 // import testData from '../utils/testData';
 
 // 市场大盘
@@ -52,19 +54,22 @@ export default {
     tableData.push({ ...item });
 
     item['类别'] = '相比前一日';
-    item['搜索人气'] = seIpvUvHits ? this.decimalFormat(seIpvUvHits.cycleCrc) : '-';
-    item['访客数'] = uv ? this.decimalFormat(uv.cycleCrc) : '-';
-    item['收藏人数'] = cltByrCnt ? this.decimalFormat(cltByrCnt.cycleCrc) : '-';
-    item['加购人数'] = cartByrCnt ? this.decimalFormat(cartByrCnt.cycleCrc) : '-';
-    item['客群指数'] = payByrCntIndex ? this.decimalFormat(payByrCntIndex.cycleCrc) : '-';
-    item['交易指数'] = tradeIndex ? this.decimalFormat(tradeIndex.cycleCrc) : '-';
+    item['搜索人气'] = seIpvUvHits ? decimalFormat(seIpvUvHits.cycleCrc) : '-';
+    item['访客数'] = uv ? decimalFormat(uv.cycleCrc) : '-';
+    item['收藏人数'] = cltByrCnt ? decimalFormat(cltByrCnt.cycleCrc) : '-';
+    item['加购人数'] = cartByrCnt ? decimalFormat(cartByrCnt.cycleCrc) : '-';
+    item['客群指数'] = payByrCntIndex ? decimalFormat(payByrCntIndex.cycleCrc) : '-';
+    item['交易指数'] = tradeIndex ? decimalFormat(tradeIndex.cycleCrc) : '-';
     tableData.push({ ...item });
 
+    const button = generateDownloadButton({
+      data: tableData,
+      filename: '市场大盘.xlsx',
+    });
+
     popup.reset();
+    popup.add(button);
     new MyTable('.ym-dialog', tableData);
     popup.show();
-  },
-  decimalFormat(num) {
-    return `${(num * 100).toFixed(2)}%`;
   },
 };
