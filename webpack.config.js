@@ -11,7 +11,7 @@ module.exports = {
   },
   output: {
     filename: './scripts/[name].js',
-    path: path.resolve(__dirname, '一面生意参谋插件'),
+    path: path.resolve(__dirname, 'ym-sycm-plugin'),
   },
   devServer: {
     contentBase: path.join(__dirname, ''),
