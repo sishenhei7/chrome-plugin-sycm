@@ -21,39 +21,50 @@ export default {
         button.innerHTML = '一面插件：点击查看';
 
         const popup = new Popup();
-        button.addEventListener('click', () => this.handleButtonClick(popup));
+        button.addEventListener('click', () => this.handleOverviewButtonClick(popup));
         container.appendChild(button);
       }
     }
   },
-  handleButtonClick(popup) {
+  handleOverviewButtonClick(popup) {
     // const { tableData } = testData;
     const str = parseLocalStorage('mc/mq/supply/mkt/overview.json');
     const data = decryptor(str);
 
     const item = {};
     const tableData = [];
+    const {
+      seIpvUvHits,
+      uv,
+      cltByrCnt,
+      cartByrCnt,
+      payByrCntIndex,
+      tradeIndex,
+    } = data;
 
     item['类别'] = '值';
-    item['搜索人气'] = data.seIpvUvHits.value;
-    item['访客数'] = data.uv.value;
-    item['收藏人数'] = data.cltByrCnt.value;
-    item['加购人数'] = data.cartByrCnt.value;
-    item['客群指数'] = data.payByrCntIndex.value;
-    item['交易指数'] = data.tradeIndex.value;
+    item['搜索人气'] = seIpvUvHits ? Math.round(seIpvUvHits.value) : '-';
+    item['访客数'] = uv ? Math.round(uv.value) : '-';
+    item['收藏人数'] = cltByrCnt ? Math.round(cltByrCnt.value) : '-';
+    item['加购人数'] = cartByrCnt ? Math.round(cartByrCnt.value) : '-';
+    item['客群指数'] = payByrCntIndex ? Math.round(payByrCntIndex.value) : '-';
+    item['交易指数'] = tradeIndex ? Math.round(tradeIndex.value) : '-';
     tableData.push({ ...item });
 
     item['类别'] = '相比前一日';
-    item['搜索人气'] = data.seIpvUvHits.cycleCrc;
-    item['访客数'] = data.uv.cycleCrc;
-    item['收藏人数'] = data.cltByrCnt.cycleCrc;
-    item['加购人数'] = data.cartByrCnt.cycleCrc;
-    item['客群指数'] = data.payByrCntIndex.cycleCrc;
-    item['交易指数'] = data.tradeIndex.cycleCrc;
+    item['搜索人气'] = seIpvUvHits ? this.decimalFormat(seIpvUvHits.cycleCrc) : '-';
+    item['访客数'] = uv ? this.decimalFormat(uv.cycleCrc) : '-';
+    item['收藏人数'] = cltByrCnt ? this.decimalFormat(cltByrCnt.cycleCrc) : '-';
+    item['加购人数'] = cartByrCnt ? this.decimalFormat(cartByrCnt.cycleCrc) : '-';
+    item['客群指数'] = payByrCntIndex ? this.decimalFormat(payByrCntIndex.cycleCrc) : '-';
+    item['交易指数'] = tradeIndex ? this.decimalFormat(tradeIndex.cycleCrc) : '-';
     tableData.push({ ...item });
 
     popup.reset();
     new MyTable('.ym-dialog', tableData);
     popup.show();
+  },
+  decimalFormat(num) {
+    return `${(num * 100).toFixed(2)}%`;
   },
 };

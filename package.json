@@ -20,7 +20,7 @@
       "pre-commit": "lint-staged"
     }
   },
-  "author": "",
+  "author": "yangzhou",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.7.7",

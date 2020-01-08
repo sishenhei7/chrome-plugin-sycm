@@ -1,5 +1,4 @@
 {
-  "id": "com.zhishu99.plugin",
   "manifest_version": 2,
   "author": "yimian",
   "name": "一面数据：生意参谋插件",
@@ -23,7 +22,7 @@
   "content_scripts": [
     {
       "js": [
-        "dist/contentscript.js"
+        "scripts/contentscript.js"
       ],
       "matches": [
         "http://*.taobao.com/*",

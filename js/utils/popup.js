@@ -6,8 +6,8 @@ export default class Popup {
   }
 
   init() {
-    const overlay = document.querySelector('ym-overlay');
-    const dialog = document.querySelector('ym-dialog');
+    const overlay = document.querySelector('.ym-overlay');
+    const dialog = document.querySelector('.ym-dialog');
     if (dialog) {
       this.overlay = overlay;
       this.dialog = dialog;
