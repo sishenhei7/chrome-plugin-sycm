@@ -1,35 +1,18 @@
-import Popup from '../utils/popup';
-import MyTable from '../utils/table';
 import { parseLocalStorage, decryptor } from '../utils/decrypt';
-import { generateDownloadButton } from '../utils/xlsx';
+import { generateSeeButton } from '../utils/dom';
 import { decimalFormat } from '../utils/util';
-// import testData from '../utils/testData';
+import { ymDialog } from '../components';
 
 // 市场大盘
 export default {
   init() {
-    this.addOverviewButton();
+    generateSeeButton({
+      parent: '#cateTrend .cardHeader',
+      buttonId: 'ym-market-index-overview',
+      callback: () => this.overviewClick(),
+    });
   },
-  addOverviewButton() {
-    let button = document.querySelector('#ym-market-index-overview');
-
-    if (!button) {
-      const container = document.querySelector('#cateTrend .cardHeader');
-
-      if (container) {
-        button = document.createElement('button');
-        button.id = 'ym-market-index-overview';
-        button.className = 'ym-button ym-button-see';
-        button.innerHTML = '一面插件：点击查看';
-
-        const popup = new Popup();
-        button.addEventListener('click', () => this.handleOverviewButtonClick(popup));
-        container.appendChild(button);
-      }
-    }
-  },
-  handleOverviewButtonClick(popup) {
-    // const { tableData } = testData;
+  overviewClick() {
     const str = parseLocalStorage('mc/mq/supply/mkt/overview.json');
     const data = decryptor(str);
 
@@ -44,7 +27,7 @@ export default {
       tradeIndex,
     } = data;
 
-    item['类别'] = '值';
+    item['类别'] = '当前值';
     item['搜索人气'] = seIpvUvHits ? Math.round(seIpvUvHits.value) : '-';
     item['访客数'] = uv ? Math.round(uv.value) : '-';
     item['收藏人数'] = cltByrCnt ? Math.round(cltByrCnt.value) : '-';
@@ -62,14 +45,12 @@ export default {
     item['交易指数'] = tradeIndex ? decimalFormat(tradeIndex.cycleCrc) : '-';
     tableData.push({ ...item });
 
-    const button = generateDownloadButton({
+    const downloadConfig = {
       data: tableData,
       filename: '市场大盘.xlsx',
-    });
+    };
 
-    popup.reset();
-    popup.add(button);
-    new MyTable('.ym-dialog', tableData);
-    popup.show();
+    ymDialog.setState({ tableData, downloadConfig });
+    ymDialog.open();
   },
 };

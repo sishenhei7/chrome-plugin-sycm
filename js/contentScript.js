@@ -3,8 +3,8 @@ import brandAnalysis from './tabs/brandAnalysis';
 import marketRank from './tabs/marketRank';
 import shopAnalysis from './tabs/shopAnalysis';
 import proxyFetch from './utils/fetch';
-import { loading } from './components';
 import '../styles/app.scss';
+// import testData from './utils/testData';
 
 function addButtons() {
   const { host, pathname } = window.location;
@@ -24,10 +24,6 @@ function addButtons() {
 
 window.onload = () => {
   console.log('init: 一面数据生意参谋插件');
-  loading.open();
-  setTimeout(() => {
-    loading.close();
-  }, 3000);
   setInterval(() => {
     proxyFetch.init();
     addButtons();

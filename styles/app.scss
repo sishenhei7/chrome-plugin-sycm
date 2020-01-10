@@ -23,6 +23,13 @@
 }
 
 /* popup */
+.ym-dialog {
+  .el-dialog__body {
+    padding-top: 5px;
+  }
+}
+
+/* popup
 .ym-overlay {
   position: fixed;
   top: 0;
@@ -112,6 +119,4 @@
   overflow: auto;
 }
 
-
-
-
+*/

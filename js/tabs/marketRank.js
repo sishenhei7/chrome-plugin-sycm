@@ -1,35 +1,20 @@
 // import axios from 'axios';
-import Popup from '../utils/popup';
-import MyTable from '../utils/table';
 // import { getToken, getQueryString, getTansitId } from '../utils/util';
 import { decryptor } from '../utils/decrypt';
-import { generateDownloadButton } from '../utils/xlsx';
 import { decimalFormat } from '../utils/util';
+import { generateSeeButton } from '../utils/dom';
+import { ymDialog } from '../components';
 
 // 市场排行
 export default {
   init() {
-    this.addOverviewButton();
+    generateSeeButton({
+      parent: '.oui-card-header-wrapper .oui-card-header:not(.cardHeader)',
+      buttonId: 'ym-market-rank-overview',
+      callback: () => this.overviewClick(),
+    });
   },
-  addOverviewButton() {
-    let button = document.querySelector('#ym-market-rank');
-
-    if (!button) {
-      const container = document.querySelector('.oui-card-header-wrapper .oui-card-header:not(.cardHeader)');
-
-      if (container) {
-        button = document.createElement('button');
-        button.id = 'ym-market-rank';
-        button.className = 'ym-button ym-button-see';
-        button.innerHTML = '一面插件：点击查看';
-
-        const popup = new Popup();
-        button.addEventListener('click', () => this.handleOverviewButtonClick(popup));
-        container.appendChild(button);
-      }
-    }
-  },
-  handleOverviewButtonClick(popup) {
+  overviewClick() {
     const tabName = document.querySelector('.sycm-mc-filter-wrapper .oui-tab-switch-item-active').innerText;
     const cardName = document.querySelector('.oui-card-header-item .oui-tab-switch-item-active').innerText;
 
@@ -56,15 +41,13 @@ export default {
     const slicedData = data.sort((a, b) => a.cateRankId.value - b.cateRankId.value).slice(0, 20);
     const tableData = this.generateOverviewTableData(slicedData, tabType, cardType);
 
-    const button = generateDownloadButton({
+    const downloadConfig = {
       data: tableData,
       filename: '市场排行.xlsx',
-    });
+    };
 
-    popup.reset();
-    popup.add(button);
-    new MyTable('.ym-dialog', tableData);
-    popup.show();
+    ymDialog.setState({ tableData, downloadConfig });
+    ymDialog.open();
   },
   generateOverviewTableData(data, tabType, cardType) {
     const tableData = [];

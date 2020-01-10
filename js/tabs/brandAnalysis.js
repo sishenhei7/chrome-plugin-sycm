@@ -1,34 +1,17 @@
-import Popup from '../utils/popup';
-import MyTable from '../utils/table';
 import { parseLocalStorage, decryptor } from '../utils/decrypt';
-import { generateDownloadButton } from '../utils/xlsx';
-// import testData from '../utils/testData';
+import { generateSeeButton } from '../utils/dom';
+import { ymDialog } from '../components';
 
 // 品牌分析
 export default {
   init() {
-    this.addOverviewButton();
+    generateSeeButton({
+      parent: '#brandAnalysisTrend .cardHeader',
+      buttonId: 'ym-brand-analysis-trend',
+      callback: () => this.trendClick(),
+    });
   },
-  addOverviewButton() {
-    let button = document.querySelector('#ym-brand-analysis-trend');
-
-    if (!button) {
-      const container = document.querySelector('#brandAnalysisTrend .cardHeader');
-
-      if (container) {
-        button = document.createElement('button');
-        button.id = 'ym-brand-analysis-trend';
-        button.className = 'ym-button ym-button-see';
-        button.innerHTML = '一面插件：点击查看';
-
-        const popup = new Popup();
-        button.addEventListener('click', () => this.handleOverviewButtonClick(popup));
-        container.appendChild(button);
-      }
-    }
-  },
-  handleOverviewButtonClick(popup) {
-    // const { tableData } = testData;
+  trendClick() {
     const str = parseLocalStorage('mc/rivalBrand/analysis/getCoreIndexes.json');
     const data = decryptor(str);
 
@@ -57,7 +40,7 @@ export default {
         payByrCntIndex,
       } = tempRivalBrand;
 
-      item['类别'] = title;
+      item['品牌名称'] = title;
       item['交易指数'] = tradeIndex ? Math.round(tradeIndex.value) : '-';
       item['流量指数'] = uvIndex ? Math.round(uvIndex.value) : '-';
       item['搜索人气'] = seIpvUvHits ? Math.round(seIpvUvHits.value) : '-';
@@ -68,14 +51,12 @@ export default {
       tableData.unshift({ ...item });
     });
 
-    const button = generateDownloadButton({
+    const downloadConfig = {
       data: tableData,
       filename: '品牌分析.xlsx',
-    });
+    };
 
-    popup.reset();
-    popup.add(button);
-    new MyTable('.ym-dialog', tableData);
-    popup.show();
+    ymDialog.setState({ tableData, downloadConfig });
+    ymDialog.open();
   },
 };

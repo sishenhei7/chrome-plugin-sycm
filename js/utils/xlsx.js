@@ -1,6 +1,6 @@
 import XLSX from 'xlsx';
 
-export function jsonToExcel({ data, filename, isMultiple }) {
+export default function jsonToExcel({ data, filename, isMultiple }) {
   // A workbook is the name given to an Excel file
   const workbook = XLSX.utils.book_new();
 
@@ -21,14 +21,4 @@ export function jsonToExcel({ data, filename, isMultiple }) {
 
   // export Excel file
   XLSX.writeFile(workbook, filename);
-}
-
-export function generateDownloadButton({ data, filename, isMultiple }) {
-  const button = document.createElement('button');
-  button.className = 'ym-button ym-button-see';
-  button.innerHTML = '一面插件：点击导出';
-  button.addEventListener('click', () => {
-    jsonToExcel({ data, filename, isMultiple });
-  });
-  return button;
 }

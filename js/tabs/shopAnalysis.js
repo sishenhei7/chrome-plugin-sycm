@@ -1,35 +1,23 @@
-import Popup from '../utils/popup';
-import MyTable from '../utils/table';
 import { parseLocalStorage, decryptor } from '../utils/decrypt';
-import { generateDownloadButton } from '../utils/xlsx';
-// import testData from '../utils/testData';
+import { generateSeeButton } from '../utils/dom';
+import { ymDialog } from '../components';
 
 // 品牌分析
 export default {
   init() {
-    this.addOverviewButton();
-    this.addSourceButton();
+    generateSeeButton({
+      parent: '#shopAnalysisSelect .oui-card-header',
+      buttonId: 'ym-shop-analysis-select',
+      callback: () => this.overviewClick(),
+    });
+
+    generateSeeButton({
+      parent: '#sycm-mc-flow-analysis .oui-card-header',
+      buttonId: 'ym-shop-analysis-flow',
+      callback: () => this.sourceClick(),
+    });
   },
-  addOverviewButton() {
-    let button = document.querySelector('#ym-shop-analysis-select');
-
-    if (!button) {
-      const container = document.querySelector('#shopAnalysisSelect .oui-card-header');
-
-      if (container) {
-        button = document.createElement('button');
-        button.id = 'ym-shop-analysis-select';
-        button.className = 'ym-button ym-button-see';
-        button.innerHTML = '一面插件：点击查看';
-
-        const popup = new Popup();
-        button.addEventListener('click', () => this.handleOverviewButtonClick(popup));
-        container.appendChild(button);
-      }
-    }
-  },
-  handleOverviewButtonClick(popup) {
-    // const { tableData } = testData;
+  overviewClick() {
     const str = parseLocalStorage('mc/rivalShop/analysis/getLiveCoreIndexes.json');
     const { data } = decryptor(str);
 
@@ -61,7 +49,7 @@ export default {
         payByrCntIndex,
       } = tempShop;
 
-      item['类别'] = title;
+      item['店铺名称'] = title;
       item['交易指数'] = tradeIndex ? Math.round(tradeIndex.value) : '-';
       item['流量指数'] = uvIndex ? Math.round(uvIndex.value) : '-';
       item['收藏人气'] = cltHits ? Math.round(cltHits.value) : '-';
@@ -71,36 +59,15 @@ export default {
       tableData.unshift({ ...item });
     });
 
-    const button = generateDownloadButton({
+    const downloadConfig = {
       data: tableData,
       filename: '竞店对比.xlsx',
-    });
+    };
 
-    popup.reset();
-    popup.add(button);
-    new MyTable('.ym-dialog', tableData);
-    popup.show();
+    ymDialog.setState({ tableData, downloadConfig });
+    ymDialog.open();
   },
-  addSourceButton() {
-    let button = document.querySelector('#ym-shop-analysis-flow');
-
-    if (!button) {
-      const container = document.querySelector('#sycm-mc-flow-analysis .oui-card-header');
-
-      if (container) {
-        button = document.createElement('button');
-        button.id = 'ym-shop-analysis-flow';
-        button.className = 'ym-button ym-button-see';
-        button.innerHTML = '一面插件：点击查看';
-
-        const popup = new Popup();
-        button.addEventListener('click', () => this.handleSourceButtonClick(popup));
-        container.appendChild(button);
-      }
-    }
-  },
-  handleSourceButtonClick(popup) {
-    // const { tableData } = testData;
+  sourceClick() {
     const str = parseLocalStorage('mc/rivalShop/analysis/getLiveFlowSource.json');
     const { data } = decryptor(str);
 
@@ -128,16 +95,14 @@ export default {
       name: '入店来源',
     });
 
-    const button = generateDownloadButton({
+    const downloadConfig = {
       data: downloadData,
       filename: '入店来源.xlsx',
       isMultiple: true,
-    });
+    };
 
-    popup.reset();
-    popup.add(button);
-    new MyTable('.ym-dialog', tableData);
-    popup.show();
+    ymDialog.setState({ tableData, downloadConfig });
+    ymDialog.open();
   },
   generateRow(rowData) {
     const {

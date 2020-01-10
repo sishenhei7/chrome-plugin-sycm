@@ -43,7 +43,8 @@
     "images/*",
     "styles/*",
     "scripts/*",
-    "icons/*"
+    "icons/*",
+    "fonts/*"
   ],
   "homepage_url": "https://www.yimian.com.cn/",
   "permissions": [
