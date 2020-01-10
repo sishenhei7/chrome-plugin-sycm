@@ -25,6 +25,8 @@ class MyDialog {
   }
 
   setState(data) {
+    // 这里没有清除以前的数据，或许有坑，暂无解决方案
+    // 目前是正常的
     Object.keys(data).forEach((item) => {
       this.dialog[item] = data[item];
     });
