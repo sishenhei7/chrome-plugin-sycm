@@ -1,5 +1,6 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV,
@@ -22,24 +23,28 @@ module.exports = {
     open: true,
     hot: true,
   },
+  resolve: {
+    alias: {
+      vue$: 'vue/dist/vue.esm.js',
+    },
+  },
   module: {
     rules: [
       {
-        enforce: 'pre',
         test: /\.js$/,
         exclude: /node_modules/,
-        options: {
-          configFile: path.resolve(__dirname, './.eslintrc'),
-        },
-        loader: 'eslint-loader',
+        use: [
+          'babel-loader',
+          {
+            loader: 'eslint-loader',
+            options: {
+              configFile: path.resolve(__dirname, './.eslintrc'),
+            },
+          },
+        ],
       },
       {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-      },
-      {
-        test: /\.css$/i,
+        test: /\.css$/,
         use: [
           'style-loader',
           'css-loader',
@@ -47,7 +52,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.s[ac]ss$/i,
+        test: /\.s[ac]ss$/,
         use: [
           'style-loader',
           'css-loader',
@@ -60,9 +65,32 @@ module.exports = {
           'postcss-loader',
         ],
       },
+      {
+        test: /\.vue$/,
+        use: [
+          'vue-loader',
+        ],
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        loader: 'url-loader',
+        query: {
+          limit: 4000,
+          name: 'images/[name].[hash:8].[ext]',
+        },
+      },
+      {
+        test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
+        loader: 'url-loader',
+        query: {
+          limit: 5000,
+          name: 'fonts/[name].[hash:8].[ext]',
+        },
+      },
     ],
   },
   plugins: [
+    new VueLoaderPlugin(),
     new CopyPlugin([
       {
         from: 'manifest.json',

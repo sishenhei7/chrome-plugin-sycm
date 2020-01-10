@@ -1,6 +1,7 @@
 {
     "extends": [
-        "airbnb-base"
+        "airbnb-base",
+        "plugin:vue/recommended"
     ],
     "plugins": [
         "import"
@@ -38,6 +39,23 @@
         "no-plusplus": 0,
         "no-script-url": 0,
         "no-underscore-dangle": 0,
-        "object-curly-newline": 0
+        "object-curly-newline": 0,
+        "arrow-parens": 0,
+        "no-debugger": 0,
+        "no-shadow": 0,
+        "operator-linebreak": [
+            2,
+            "before"
+        ],
+        "max-len": [
+            "error",
+            {
+                "ignoreStrings": true,
+                "ignoreUrls": true,
+                "ignoreRegExpLiterals": true,
+                "ignoreTemplateLiterals": true,
+                "code": 120
+            }
+        ]
     }
 }
