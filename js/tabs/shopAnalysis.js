@@ -71,17 +71,33 @@ export default {
     const str = parseLocalStorage('mc/rivalShop/analysis/getLiveFlowSource.json');
     const { data } = decryptor(str);
 
+    let id = 0;
     const tableData = [];
+    const downloadFirstData = [];
     const downloadData = [];
 
     data.forEach((row) => {
-      const item = this.generateRow(row);
-      tableData.push({ ...item });
+      // 展示的数据
+      id += 1;
+      const item = this.generateRow(row, id);
 
       const childItem = [];
       row.children.forEach((childRow) => {
-        const childRowItem = this.generateRow(childRow);
+        id += 1;
+        const childRowItem = this.generateRow(childRow, id);
         childItem.push({ ...childRowItem });
+      });
+
+      item.children = [...childItem];
+      tableData.push({ ...item });
+
+      // 下载的数据
+      downloadFirstData.push(this.generateRow(row));
+      const downloadChildItem = [];
+
+      row.children.forEach((childRow) => {
+        const childRowItem = this.generateRow(childRow);
+        downloadChildItem.push({ ...childRowItem });
       });
 
       downloadData.push({
@@ -91,7 +107,7 @@ export default {
     });
 
     downloadData.unshift({
-      data: tableData,
+      data: downloadFirstData,
       name: '入店来源',
     });
 
@@ -104,7 +120,7 @@ export default {
     ymDialog.setState({ tableData, downloadConfig });
     ymDialog.open();
   },
-  generateRow(rowData) {
+  generateRow(rowData, id) {
     const {
       pageName,
       selfShopUvIndex,
@@ -114,17 +130,11 @@ export default {
     } = rowData;
 
     const item = {};
+    item.id = id;
     item['流量来源'] = pageName ? pageName.value : '-';
     item['流量指数(本店)'] = selfShopUvIndex ? Math.round(selfShopUvIndex.value) : '-';
-
-    if (rivalShop1UvIndex) {
-      item['流量指数(竞店1)'] = rivalShop1UvIndex ? Math.round(rivalShop1UvIndex.value) : '-';
-    }
-
-    if (rivalShop2UvIndex) {
-      item['流量指数(竞店2)'] = rivalShop2UvIndex ? Math.round(rivalShop2UvIndex.value) : '-';
-    }
-
+    item['流量指数(竞店1)'] = rivalShop1UvIndex ? Math.round(rivalShop1UvIndex.value) : '-';
+    item['流量指数(竞店2)'] = rivalShop2UvIndex ? Math.round(rivalShop2UvIndex.value) : '-';
     item['本店访问数'] = selfShopUv ? Math.round(selfShopUv.value) : '-';
 
     return item;

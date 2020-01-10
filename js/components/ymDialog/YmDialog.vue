@@ -18,10 +18,12 @@
     </div>
     <el-table
       v-if="tableData"
+      style="width: 100%; margin-top: 10px;"
       :data="tableData"
       border
       fit
-      style="width: 100%; margin-top: 10px;"
+      row-key="id"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
     >
       <el-table-column
         v-for="item in headerList"
@@ -74,7 +76,9 @@ export default {
       if (!this.tableData || this.tableData.length < 1) {
         return [];
       }
-      return Object.keys(this.tableData[0]);
+
+      const hidedKeys = ['id', 'children'];
+      return Object.keys(this.tableData[0]).filter(item => !hidedKeys.includes(item));
     },
   },
   methods: {
