@@ -1,7 +1,7 @@
 import { parseLocalStorage, decryptor } from '../utils/decrypt';
 import { generateSeeButton } from '../utils/dom';
 import { ymDialog } from '../components';
-import { getQueryString } from '../utils/util';
+import { getQueryString, decimalFormat } from '../utils/util';
 
 // 品牌分析
 export default {
@@ -77,8 +77,19 @@ export default {
     ymDialog.open();
   },
   sourceClick() {
-    const str = parseLocalStorage('mc/rivalShop/analysis/getLiveFlowSource.json');
-    const { data } = decryptor(str);
+    const { dateType } = getQueryString();
+    const type = document.querySelector(
+      '#sycm-mc-flow-analysis .ant-radio-wrapper-checked .oui-index-picker-text',
+    ).innerText;
+
+    let data = [];
+    if (dateType === 'today') {
+      const str = parseLocalStorage('mc/rivalShop/analysis/getLiveFlowSource.json');
+      data = decryptor(str).data;
+    } else {
+      const str = parseLocalStorage('mc/rivalShop/analysis/getFlowSource.json');
+      data = decryptor(str);
+    }
 
     let id = 0;
     const tableData = [];
@@ -88,31 +99,35 @@ export default {
     data.forEach((row) => {
       // 展示的数据
       id += 1;
-      const item = this.generateRow(row, id);
+      const item = this.generateRow(type, row, id);
+      if (row.children) {
+        const childItem = [];
 
-      const childItem = [];
-      row.children.forEach((childRow) => {
-        id += 1;
-        const childRowItem = this.generateRow(childRow, id);
-        childItem.push({ ...childRowItem });
-      });
+        row.children.forEach((childRow) => {
+          id += 1;
+          const childRowItem = this.generateRow(type, childRow, id);
+          childItem.push({ ...childRowItem });
+        });
 
-      item.children = [...childItem];
+        item.children = [...childItem];
+      }
       tableData.push({ ...item });
 
       // 下载的数据
-      downloadFirstData.push(this.generateRow(row));
-      const downloadChildItem = [];
+      downloadFirstData.push(this.generateRow(type, row));
+      if (row.children) {
+        const downloadChildItem = [];
 
-      row.children.forEach((childRow) => {
-        const childRowItem = this.generateRow(childRow);
-        downloadChildItem.push({ ...childRowItem });
-      });
+        row.children.forEach((childRow) => {
+          const childRowItem = this.generateRow(type, childRow);
+          downloadChildItem.push({ ...childRowItem });
+        });
 
-      downloadData.push({
-        data: childItem,
-        name: item['流量来源'],
-      });
+        downloadData.push({
+          data: downloadChildItem,
+          name: item['流量来源'],
+        });
+      }
     });
 
     downloadData.unshift({
@@ -129,22 +144,51 @@ export default {
     ymDialog.setState({ tableData, downloadConfig });
     ymDialog.open();
   },
-  generateRow(rowData, id) {
+  generateRow(type, rowData, id) {
     const {
       pageName,
       selfShopUvIndex,
       rivalShop1UvIndex,
       rivalShop2UvIndex,
       selfShopUv,
+      selfShopPayByrCntIndex,
+      rivalShop1PayByrCntIndex,
+      rivalShop2PayByrCntIndex,
+      selfShopPayByrCnt,
+      selfShopPayRateIndex,
+      rivalShop1PayRateIndex,
+      rivalShop2PayRateIndex,
+      selfShopPayRate,
+      selfShopTradeIndex,
+      rivalShop1TradeIndex,
+      rivalShop2TradeIndex,
+      selfShopPayAmt,
     } = rowData;
 
     const item = {};
     item.id = id;
     item['流量来源'] = pageName ? pageName.value : '-';
-    item['流量指数(本店)'] = selfShopUvIndex ? Math.round(selfShopUvIndex.value) : '-';
-    item['流量指数(竞店1)'] = rivalShop1UvIndex ? Math.round(rivalShop1UvIndex.value) : '-';
-    item['流量指数(竞店2)'] = rivalShop2UvIndex ? Math.round(rivalShop2UvIndex.value) : '-';
-    item['本店访问数'] = selfShopUv ? Math.round(selfShopUv.value) : '-';
+    if (type === '流量指数') {
+      item['流量指数(本店)'] = selfShopUvIndex ? Math.round(selfShopUvIndex.value) : '-';
+      item['流量指数(竞店1)'] = rivalShop1UvIndex ? Math.round(rivalShop1UvIndex.value) : '-';
+      item['流量指数(竞店2)'] = rivalShop2UvIndex ? Math.round(rivalShop2UvIndex.value) : '-';
+      item['本店访问数'] = selfShopUv ? Math.round(selfShopUv.value) : '-';
+    } else if (type === '客群指数') {
+      item['客群指数(本店)'] = selfShopPayByrCntIndex ? Math.round(selfShopPayByrCntIndex.value) : '-';
+      item['客群指数(竞店1)'] = rivalShop1PayByrCntIndex ? Math.round(rivalShop1PayByrCntIndex.value) : '-';
+      item['客群指数(竞店2)'] = rivalShop2PayByrCntIndex ? Math.round(rivalShop2PayByrCntIndex.value) : '-';
+      item['本店支付买家数'] = selfShopPayByrCnt ? Math.round(selfShopPayByrCnt.value) : '-';
+    } else if (type === '支付转化指数') {
+      item['支付转化指数(本店)'] = selfShopPayRateIndex ? Math.round(selfShopPayRateIndex.value) : '-';
+      item['支付转化指数(竞店1)'] = rivalShop1PayRateIndex ? Math.round(rivalShop1PayRateIndex.value) : '-';
+      item['支付转化指数(竞店2)'] = rivalShop2PayRateIndex ? Math.round(rivalShop2PayRateIndex.value) : '-';
+      item['本店支付转化率'] = selfShopPayRate ? decimalFormat(selfShopPayRate.value) : '-';
+    } else if (type === '交易指数') {
+      item['交易指数(本店)'] = selfShopTradeIndex ? Math.round(selfShopTradeIndex.value) : '-';
+      item['交易指数(竞店1)'] = rivalShop1TradeIndex ? Math.round(rivalShop1TradeIndex.value) : '-';
+      item['交易指数(竞店2)'] = rivalShop2TradeIndex ? Math.round(rivalShop2TradeIndex.value) : '-';
+      item['本店支付金额'] = selfShopPayAmt ? Math.round(selfShopPayAmt.value) : '-';
+    }
 
     return item;
   },
