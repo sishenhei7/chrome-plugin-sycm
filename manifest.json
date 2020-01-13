@@ -25,15 +25,9 @@
         "scripts/contentscript.js"
       ],
       "matches": [
-        "http://*.taobao.com/*",
-        "https://*.taobao.com/*",
-        "http://*.tmall.com/*",
-        "https://*.tmall.com/*",
-        "https://*.pinduoduo.com/*",
-        "https://*.jd.com/*",
-        "https://*.yimian.com.cn/*",
-        "https://*.test.yimian.com.cn/*"
-        ],
+        "http://sycm.taobao.com/*",
+        "https://sycm.taobao.com/*"
+      ],
       "run_at": "document_end"
     }
   ],

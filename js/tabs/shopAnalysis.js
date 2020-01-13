@@ -1,6 +1,7 @@
 import { parseLocalStorage, decryptor } from '../utils/decrypt';
 import { generateSeeButton } from '../utils/dom';
 import { ymDialog } from '../components';
+import { getQueryString } from '../utils/util';
 
 // 品牌分析
 export default {
@@ -18,8 +19,16 @@ export default {
     });
   },
   overviewClick() {
-    const str = parseLocalStorage('mc/rivalShop/analysis/getLiveCoreIndexes.json');
-    const { data } = decryptor(str);
+    const { dateType } = getQueryString();
+
+    let data = [];
+    if (dateType === 'today') {
+      const str = parseLocalStorage('mc/rivalShop/analysis/getLiveCoreIndexes.json');
+      data = decryptor(str).data;
+    } else {
+      const str = parseLocalStorage('mc/rivalShop/analysis/getCoreIndexes.json');
+      data = decryptor(str);
+    }
 
     const tableData = [];
     const titles = document.querySelectorAll('#shopAnalysisSelect .sycm-common-select-selected-title');
