@@ -9,6 +9,8 @@ module.exports = {
     popup: './js/popup.js',
     background: './js/background.js',
     contentScript: './js/contentScript.js',
+    xhrHook: './js/xhrHook.js',
+    fetchHook: './js/fetchHook.js',
   },
   output: {
     filename: './scripts/[name].js',

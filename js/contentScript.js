@@ -2,7 +2,7 @@ import marketIndex from './tabs/marketIndex';
 import brandAnalysis from './tabs/brandAnalysis';
 import marketRank from './tabs/marketRank';
 import shopAnalysis from './tabs/shopAnalysis';
-import proxyFetch from './utils/fetch';
+// import proxyFetch from './utils/fetch';
 import '../styles/app.scss';
 // import testData from './utils/testData';
 
@@ -25,7 +25,7 @@ function addButtons() {
 window.onload = () => {
   console.log('init: 一面数据生意参谋插件');
   setInterval(() => {
-    proxyFetch.init();
+    // proxyFetch.init();
     addButtons();
   }, 2000);
 };

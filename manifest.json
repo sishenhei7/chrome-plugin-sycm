@@ -22,11 +22,31 @@
   "content_scripts": [
     {
       "js": [
-        "scripts/contentscript.js"
+        "scripts/fetchHook.js"
       ],
       "matches": [
         "http://sycm.taobao.com/*",
         "https://sycm.taobao.com/*"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "js": [
+        "scripts/xhrHook.js"
+      ],
+      "matches": [
+        "https://sz.jd.com/*"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "js": [
+        "scripts/contentscript.js"
+      ],
+      "matches": [
+        "http://sycm.taobao.com/*",
+        "https://sycm.taobao.com/*",
+        "https://sz.jd.com/*"
       ],
       "run_at": "document_end"
     }
